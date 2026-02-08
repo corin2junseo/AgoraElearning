@@ -63,6 +63,27 @@ export const UserContextProvider = ({ children }) => {
       setLoading(false);
     }
   }, []); // 의존성 배열을 빈 배열로 설정하여 최초 마운트 시에만 호출하게 함
+  
+  const verifyOtp = async (otp, navigate) => {
+    setBtnLoading(true);
+    const activationToken = localStorage.getItem("activationToken");
+    try {
+      const { data } = await axios.post(`${server}/api/user/verify`, {
+        otp,
+        activationToken,
+      });
+  
+      toast.success(data.message);
+      localStorage.clear();
+      setBtnLoading(false);
+      navigate("/login");
+    } catch (error) {
+      setBtnLoading(false);
+      toast.error(error.response?.data?.message || "OTP verification failed");
+    }
+  };
+  
+
 
   const registerUser = async (name, email, password, navigate) => {
     setBtnLoading(true);
@@ -100,6 +121,7 @@ export const UserContextProvider = ({ children }) => {
         loading,
         registerUser,
         fetchUser,
+        verifyOtp,
       }}
     >
       {children}

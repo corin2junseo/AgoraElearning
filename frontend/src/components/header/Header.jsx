@@ -15,6 +15,7 @@ const Header = ({ isAuth }) => {
           <>
             <Link to={"/account"}>내 계정</Link>
             <Link to={"/logout"}>로그아웃</Link>
+            <Link to={"/lobby"}>실시간 강의</Link>
           </>
         ) : (
           <Link to={"/login"}>로그인</Link>

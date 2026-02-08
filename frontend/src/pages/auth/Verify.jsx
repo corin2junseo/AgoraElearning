@@ -32,10 +32,9 @@ const Verify = () => {
             required
           />
           <ReCAPTCHA
-            sitekey=" 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+            sitekey="6LduxpEqAAAAAI9jpLuNKkpo4s5U4U2jcFQ1qIrT"
             onChange={onChange}
           />
-          ,
           {show && (
             <button disabled={btnLoading} type="submit" className="common-btn">
               {btnLoading ? "Please Wait..." : "Verify"}

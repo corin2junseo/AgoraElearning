@@ -22,6 +22,10 @@ import AdminCourses from "./admin/Courses/AdminCourses";
 import AdminUsers from "./admin/Users/AdminUsers";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
+import Lobby from "./pages/agora/Lobby/Lobby"; // Lobby 컴포넌트 import
+import Room from "./pages/agora/Room/Room"; // Room 컴포넌트 import
+import LobbyComponent from './pages/agora/Lobby_test/LobbyComponent'; // 위에서 만든 컴포넌트
+
 
 const App = () => {
   const { isAuth, user, loading } = UserData();
@@ -70,17 +74,14 @@ const App = () => {
               path="/course/study/:id"
               element={isAuth ? <CourseStudy user={user} /> : <Login />}
             />
-
             <Route
               path="/lectures/:id"
               element={isAuth ? <Lecture user={user} /> : <Login />}
             />
-
             <Route
               path="/admin/dashboard"
               element={isAuth ? <AdminDashbord user={user} /> : <Login />}
             />
-
             <Route
               path="/admin/course"
               element={isAuth ? <AdminCourses user={user} /> : <Login />}
@@ -89,6 +90,10 @@ const App = () => {
               path="/admin/users"
               element={isAuth ? <AdminUsers user={user} /> : <Login />}
             />
+            {/* 추가된 라우트 */}
+            <Route path="/lobbytest" element={<Lobby />} />
+            <Route path="/room" element={<Room />} /> 
+            <Route path="/lobby" element={<LobbyComponent />} />
           </Routes>
           <Footer />
         </BrowserRouter>

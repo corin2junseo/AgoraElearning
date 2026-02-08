@@ -13,11 +13,12 @@ const CourseCard = ({ course }) => {
   const { fetchCourses } = CourseData();
 
   const deleteHandler = async (id) => {
+    const token = localStorage.getItem("token");
     if (confirm("Are you sure you want to delete this course?")) {
       try {
         const { data } = await axios.delete(`${server}/api/course/${id}`, {
           headers: {
-            token: localStorage.getItem("token"),
+            Authorization: `Bearer ${token}`, // Authorization 헤더에 JWT 포함
           },
         });
 

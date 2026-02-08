@@ -40,7 +40,7 @@ export const fetchLectures = TryCatch(async (req, res) => {
 
   if (!user.subscription.includes(req.params.id))
     return res.status(400).json({
-      message: "You have not subscribed to this course",
+      message: "이 강좌를 수강신청하지 않았어",
     });
 
   res.json({ lectures });
@@ -57,7 +57,7 @@ export const fetchLecture = TryCatch(async (req, res) => {
 
   if (!user.subscription.includes(lecture.course))
     return res.status(400).json({
-      message: "You have not subscribed to this course",
+      message: "이 강좌를 수강신청하지 않았어",
     });
 
   res.json({ lecture });
@@ -244,15 +244,14 @@ export const purchaseCourse = TryCatch(async (req, res) => {
 
     // 사용자의 구독 목록에 코스가 포함되어 있는지 확인합니다.
     if (user.subscription.includes(course._id)) {
-      return res.status(400).json({ message: "You already purchased this course" });
+      return res.status(400).json({ message: "이미 수강한 강좌임" });
     }
-
-    // 코스를 구매하는 로직을 여기에 추가합니다.
-    // 예를 들어, 사용자의 구독 목록에 코스를 추가합니다.
+    
+    // 사용자의 구독 목록에 코스를 추가합니다.
     user.subscription.push(course._id);
     await user.save();
 
-    return res.status(200).json({ message: "Course purchased successfully", courseId });
+    return res.status(200).json({ message: "수강신청완료", courseId });
   } catch (error) {
     console.error("Error purchasing course:", error);
     return res.status(500).json({ message: "Internal Server Error" });

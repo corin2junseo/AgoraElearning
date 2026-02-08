@@ -95,7 +95,7 @@ export const loginUser = TryCatch(async (req, res) => {
 
   // JWT 생성
   const token = jwt.sign({ _id: user._id }, process.env.Jwt_Sec, {
-    expiresIn: "20m", // 또는 필요에 따라 조정
+    expiresIn: "1d", // 또는 필요에 따라 조정
   });
 
   // 비밀번호를 제외한 사용자 정보
@@ -107,7 +107,7 @@ export const loginUser = TryCatch(async (req, res) => {
   };
 
   res.json({
-    message: `Welcome back ${user.name},${userWithoutPassword._id},${token}`,
+    message: `Welcome back ${user.name}`,
     token,
     user: userWithoutPassword,
   });
