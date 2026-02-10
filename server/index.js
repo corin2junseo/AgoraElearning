@@ -26,6 +26,10 @@ app.get("/", (req, res) => {
   res.send("Server is working");
 });
 
+app.get('/ping', (req, res) => {
+  res.sendStatus(200); // 200 OK 응답
+});
+
 app.use("/uploads", express.static("uploads"));
 
 // importing routes

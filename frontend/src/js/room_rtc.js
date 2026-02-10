@@ -58,10 +58,46 @@ let joinStream = async () => {
     document.getElementById('join-btn').style.display = 'none'
     document.getElementsByClassName('stream__actions')[0].style.display = 'flex'
 
-    localTracks = await AgoraRTC.createMicrophoneAndCameraTracks({}, {encoderConfig:{
-        width:{min:640, ideal:1920, max:1920},
-        height:{min:480, ideal:1080, max:1080}
-    }})
+localTracks = await AgoraRTC.createMicrophoneAndCameraTracks(
+  {}, 
+  {
+    encoderConfig: {
+      width: { min: 320, ideal: 1280, max: 1920 },
+      height: { min: 240, ideal: 720, max: 1080 },
+      bitrateMin: 200,
+      bitrateMax: 1500,
+      degradationPreference: "balanced"  // 네트워크 상황에 따라 화질/프레임 자동 조절 옵션
+    },
+    optimizationMode: 'motion' // 모션 씬에 최적화된 비디오 스트림
+  }
+);
+
+setInterval(async () => {
+  try {
+    const stats = await client.getRTCStats();
+    const rtt = stats.rtt || 0;
+    const packetLoss = stats.audioPacketLossRate + stats.videoPacketLossRate;
+
+    if (rtt > 200 || packetLoss > 0.1) { // RTT 200ms 이상 또는 패킷 손실률 10% 이상이면
+      switchToLowerQuality();
+    } else {
+      switchToHigherQuality();
+    }
+  } catch (e) {
+    console.log('네트워크 상태 정보 불러오기 실패, 낮은 화질로 전환');
+    switchToLowerQuality();
+  }
+}, 5000);
+
+async function switchToLowerQuality() {
+  await localTracks[1].setEncoderConfiguration('360p_3'); // 낮은 해상도
+  console.log('해상도 낮춤');
+}
+
+async function switchToHigherQuality() {
+  await localTracks[1].setEncoderConfiguration('720p_3'); // 고화질
+  console.log('해상도 높임');
+}
 
 
     let player = `<div class="video__container" id="user-container-${uid}">
