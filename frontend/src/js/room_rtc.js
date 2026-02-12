@@ -72,20 +72,27 @@ localTracks = await AgoraRTC.createMicrophoneAndCameraTracks(
   }
 );
 
+let currentQuality = 'high';
+
 setInterval(async () => {
   try {
     const stats = await client.getRTCStats();
     const rtt = stats.rtt || 0;
     const packetLoss = stats.audioPacketLossRate + stats.videoPacketLossRate;
 
-    if (rtt > 200 || packetLoss > 0.1) { // RTT 200ms 이상 또는 패킷 손실률 10% 이상이면
-      switchToLowerQuality();
-    } else {
-      switchToHigherQuality();
+    if ((rtt > 200 || packetLoss > 0.1) && currentQuality !== 'low') {
+      await switchToLowerQuality();
+      currentQuality = 'low';
+    } else if ((rtt < 180 && packetLoss <= 0.1) && currentQuality !== 'high') {
+      await switchToHigherQuality();
+      currentQuality = 'high';
     }
   } catch (e) {
     console.log('네트워크 상태 정보 불러오기 실패, 낮은 화질로 전환');
-    switchToLowerQuality();
+    if (currentQuality !== 'low') {
+      await switchToLowerQuality();
+      currentQuality = 'low';
+    }
   }
 }, 5000);
 
